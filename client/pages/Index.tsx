@@ -28,7 +28,7 @@ export default function Index() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="max-w-md mx-auto p-4 space-y-4">
+      <div className="max-w-2xl lg:max-w-3xl mx-auto p-4 space-y-4">
         <header className="space-y-1">
           <h1 className="text-2xl font-bold">What's on Your Plan Today?</h1>
           <p className="text-sm text-muted-foreground">Your productivity starts now.</p>
