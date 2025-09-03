@@ -125,7 +125,7 @@ export function useTodosData() {
       }
       return { queryKey };
     },
-    onError: () => queryClient.invalidateQueries({ queryKey }),
+    onError: () => { toast.error("Failed to update"); queryClient.invalidateQueries({ queryKey }); },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
