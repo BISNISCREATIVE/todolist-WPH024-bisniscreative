@@ -68,6 +68,10 @@ function SkeletonList() {
   );
 }
 
-function Empty() {
-  return <div className="text-center text-sm text-muted-foreground py-6">No items</div>;
+function Empty({ searchActive }: { searchActive?: boolean }) {
+  return (
+    <div className="text-center text-sm text-muted-foreground py-6">
+      {searchActive ? "Try a different keyword." : "Nothing to do yet!"}
+    </div>
+  );
 }
