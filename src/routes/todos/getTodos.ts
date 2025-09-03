@@ -1,1 +1,1 @@
-export { getTodos } from "../../../server/routes/todos/getTodos";
+export { getTodos } from "../../server/routes/todos/getTodos";
