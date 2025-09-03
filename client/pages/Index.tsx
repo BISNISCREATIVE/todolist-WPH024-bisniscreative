@@ -47,7 +47,7 @@ export default function Index() {
 
         <FiltersBar />
         <TodoList />
-        <AddTodoForm />
+        <AddTaskDialog />
       </div>
     </div>
   );
