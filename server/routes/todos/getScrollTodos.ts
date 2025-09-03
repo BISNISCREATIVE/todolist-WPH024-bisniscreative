@@ -54,8 +54,10 @@ export const getScrollTodos: RequestHandler = (req, res) => {
     const hasNextPage = startIndex + q.limit < filtered.length;
 
     const payload: CursorResponse = { todos: batch, nextCursor, hasNextPage };
+    try { console.log(`[api] /todos/scroll ok batch=${batch.length} next=${nextCursor}`); } catch {}
     res.json(payload);
   } catch (error) {
+    try { console.error("/todos/scroll error", error); } catch {}
     handleZodErrorResponse(res, error);
   }
 };
