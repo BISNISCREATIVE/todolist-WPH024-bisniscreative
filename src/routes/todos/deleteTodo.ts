@@ -1,1 +1,1 @@
-export { deleteTodo } from "../../../server/routes/todos/deleteTodo";
+export { deleteTodo } from "../../server/routes/todos/deleteTodo";
