@@ -14,8 +14,8 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <Provider store={store}>
-    <QueryClientProvider client={queryClient}>
+  <QueryClientProvider client={queryClient}>
+    <Provider store={store}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
@@ -27,8 +27,8 @@ const App = () => (
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
-    </QueryClientProvider>
-  </Provider>
+    </Provider>
+  </QueryClientProvider>
 );
 
 createRoot(document.getElementById("root")!).render(<App />);
