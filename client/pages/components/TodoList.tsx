@@ -31,7 +31,7 @@ export default function TodoList() {
     const data = pageQuery.data!;
     return (
       <div className="space-y-3">
-        {data.todos.length === 0 ? <Empty /> : data.todos.map((t) => <TodoItem key={t.id} todo={t} />)}
+        {data.todos.length === 0 ? <Empty searchActive={!!filters.search} /> : data.todos.map((t) => <TodoItem key={t.id} todo={t} />)}
         <div className="flex justify-between items-center pt-2">
           <button className="text-sm underline" disabled={filters.page <= 1} onClick={() => dispatch(setPage(filters.page - 1))}>Prev</button>
           <div className="text-xs text-muted-foreground">Page {filters.page}</div>
