@@ -1,4 +1,4 @@
-import { Priority, Todo } from "../types/todos";
+import type { Todo } from "../types/todos";
 
 export const mockTodos: Todo[] = [
   {
@@ -38,5 +38,3 @@ export const mockTodos: Todo[] = [
     updatedAt: new Date().toISOString(),
   },
 ];
-
-export type { Todo, Priority };
