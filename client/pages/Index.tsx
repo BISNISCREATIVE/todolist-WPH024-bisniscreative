@@ -1,61 +1,53 @@
-import { DemoResponse } from "@shared/api";
-import { useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAppDispatch, useAppSelector } from "@/store";
+import { setCompleted, setDateRange } from "@/store/filtersSlice";
+import FiltersBar from "./components/FiltersBar";
+import AddTodoForm from "./components/AddTodoForm";
+import TodoList from "./components/TodoList";
+import dayjs from "dayjs";
 
 export default function Index() {
-  const [exampleFromServer, setExampleFromServer] = useState("");
-  // Fetch users on component mount
-  useEffect(() => {
-    fetchDemo();
-  }, []);
+  const f = useAppSelector((s) => s.filters);
+  const dispatch = useAppDispatch();
 
-  // Example of how to fetch data from the server (if needed)
-  const fetchDemo = async () => {
-    try {
-      const response = await fetch("/api/demo");
-      const data = (await response.json()) as DemoResponse;
-      setExampleFromServer(data.message);
-    } catch (error) {
-      console.error("Error fetching hello:", error);
-    }
+  const setToday = () => {
+    const start = dayjs().startOf("day").toISOString();
+    const end = dayjs().endOf("day").toISOString();
+    dispatch(setCompleted("all"));
+    dispatch(setDateRange({ gte: start, lte: end }));
+  };
+  const setUpcoming = () => {
+    const start = dayjs().add(1, "day").startOf("day").toISOString();
+    dispatch(setCompleted("all"));
+    dispatch(setDateRange({ gte: start, lte: undefined }));
+  };
+  const setCompletedOnly = () => {
+    dispatch(setCompleted("completed"));
+    dispatch(setDateRange({ gte: undefined, lte: undefined }));
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200">
-      <div className="text-center">
-        {/* TODO: FUSION_GENERATION_APP_PLACEHOLDER replace everything here with the actual app! */}
-        <h1 className="text-2xl font-semibold text-slate-800 flex items-center justify-center gap-3">
-          <svg
-            className="animate-spin h-8 w-8 text-slate-400"
-            viewBox="0 0 50 50"
-          >
-            <circle
-              className="opacity-30"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-            />
-            <circle
-              className="text-slate-600"
-              cx="25"
-              cy="25"
-              r="20"
-              stroke="currentColor"
-              strokeWidth="5"
-              fill="none"
-              strokeDasharray="100"
-              strokeDashoffset="75"
-            />
-          </svg>
-          Generating your app...
-        </h1>
-        <p className="mt-4 text-slate-600 max-w-md">
-          Watch the chat on the left for updates that might need your attention
-          to finish generating
-        </p>
-        <p className="mt-4 hidden max-w-md">{exampleFromServer}</p>
+    <div className="min-h-screen bg-background text-foreground">
+      <div className="max-w-md mx-auto p-4 space-y-4">
+        <header className="space-y-1">
+          <h1 className="text-2xl font-bold">What's on Your Plan Today?</h1>
+          <p className="text-sm text-muted-foreground">Your productivity starts now.</p>
+        </header>
+
+        <Tabs value={f.completed === "completed" ? "completed" : f.dateGte ? (dayjs(f.dateGte).isAfter(dayjs(), "day") ? "upcoming" : "today") : "today"}>
+          <TabsList className="w-full grid grid-cols-3">
+            <TabsTrigger value="today" onClick={setToday}>Today</TabsTrigger>
+            <TabsTrigger value="upcoming" onClick={setUpcoming}>Upcoming</TabsTrigger>
+            <TabsTrigger value="completed" onClick={setCompletedOnly}>Completed</TabsTrigger>
+          </TabsList>
+          <TabsContent value="today" />
+          <TabsContent value="upcoming" />
+          <TabsContent value="completed" />
+        </Tabs>
+
+        <FiltersBar />
+        <TodoList />
+        <AddTodoForm />
       </div>
     </div>
   );
