@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Priority, Todo } from "@shared/todos";
+import { Priority, Todo } from "../../../shared/todos";
 
 let todos: Todo[] = [];
 
