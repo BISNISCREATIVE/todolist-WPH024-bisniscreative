@@ -32,7 +32,7 @@ export function useTodosData() {
         order: filters.order,
         search: filters.search || undefined,
       });
-      const res = await fetch(`/api/todos?${qs}`);
+      const res = await fetch(`/todos?${qs}`);
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();
     },
@@ -54,7 +54,7 @@ export function useTodosData() {
         order: filters.order,
         search: filters.search || undefined,
       });
-      const res = await fetch(`/api/todos/scroll?${qs}`);
+      const res = await fetch(`/todos/scroll?${qs}`);
       if (!res.ok) throw new Error("Failed to fetch");
       return res.json();
     },
@@ -66,7 +66,7 @@ export function useTodosData() {
 
   const addMutation = useMutation({
     mutationFn: async (input: CreateTodoInput) => {
-      const res = await fetch("/api/todos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
+      const res = await fetch("/todos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
       if (!res.ok) throw new Error("Failed to create");
       return res.json() as Promise<Todo>;
     },
@@ -106,7 +106,7 @@ export function useTodosData() {
 
   const toggleMutation = useMutation({
     mutationFn: async (todo: Todo) => {
-      const res = await fetch(`/api/todos/${todo.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ completed: !todo.completed }) });
+      const res = await fetch(`/todos/${todo.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ completed: !todo.completed }) });
       if (!res.ok) throw new Error("Failed to update");
       return res.json() as Promise<Todo>;
     },
@@ -131,7 +131,7 @@ export function useTodosData() {
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, patch }: { id: string; patch: UpdateTodoInput }) => {
-      const res = await fetch(`/api/todos/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
+      const res = await fetch(`/todos/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
       if (!res.ok) throw new Error("Failed to update");
       return res.json() as Promise<Todo>;
     },
@@ -156,7 +156,7 @@ export function useTodosData() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/api/todos/${id}`, { method: "DELETE" });
+      const res = await fetch(`/todos/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete");
       return id;
     },
