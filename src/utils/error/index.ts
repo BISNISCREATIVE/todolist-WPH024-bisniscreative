@@ -1,1 +1,1 @@
-export * from "./handleZodErrorResponse";
+export { handleZodErrorResponse } from "./handleZodErrorResponse";
