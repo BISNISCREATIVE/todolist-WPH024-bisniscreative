@@ -98,6 +98,7 @@ export function useTodosData() {
       return { queryKey };
     },
     onError: (_err, _vars, ctx) => {
+      toast.error("Failed to create todo");
       if (ctx) queryClient.invalidateQueries({ queryKey: ctx.queryKey });
     },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
