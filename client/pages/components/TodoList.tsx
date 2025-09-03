@@ -17,7 +17,11 @@ export default function TodoList() {
     if (!el) return;
     const obs = new IntersectionObserver((entries) => {
       const e = entries[0];
-      if (e.isIntersecting && infQuery.hasNextPage && !infQuery.isFetchingNextPage) {
+      if (
+        e.isIntersecting &&
+        infQuery.hasNextPage &&
+        !infQuery.isFetchingNextPage
+      ) {
         infQuery.fetchNextPage();
       }
     });
@@ -27,15 +31,34 @@ export default function TodoList() {
 
   if (filters.viewMode === "page") {
     if (pageQuery.isLoading) return <SkeletonList />;
-    if (pageQuery.isError) return <div className="text-red-500">Error loading</div>;
+    if (pageQuery.isError)
+      return <div className="text-red-500">Error loading</div>;
     const data = pageQuery.data!;
     return (
       <div className="space-y-3">
-        {data.todos.length === 0 ? <Empty searchActive={!!filters.search} /> : data.todos.map((t) => <TodoItem key={t.id} todo={t} />)}
+        {data.todos.length === 0 ? (
+          <Empty searchActive={!!filters.search} />
+        ) : (
+          data.todos.map((t) => <TodoItem key={t.id} todo={t} />)
+        )}
         <div className="flex justify-between items-center pt-2">
-          <button className="text-sm underline" disabled={filters.page <= 1} onClick={() => dispatch(setPage(filters.page - 1))}>Prev</button>
-          <div className="text-xs text-muted-foreground">Page {filters.page}</div>
-          <button className="text-sm underline" disabled={!data.hasNextPage} onClick={() => dispatch(setPage(filters.page + 1))}>Next</button>
+          <button
+            className="text-sm underline"
+            disabled={filters.page <= 1}
+            onClick={() => dispatch(setPage(filters.page - 1))}
+          >
+            Prev
+          </button>
+          <div className="text-xs text-muted-foreground">
+            Page {filters.page}
+          </div>
+          <button
+            className="text-sm underline"
+            disabled={!data.hasNextPage}
+            onClick={() => dispatch(setPage(filters.page + 1))}
+          >
+            Next
+          </button>
         </div>
       </div>
     );
@@ -45,15 +68,26 @@ export default function TodoList() {
   return (
     <div className="space-y-3">
       {infQuery.isLoading ? <SkeletonList /> : null}
-      {infQuery.data?.pages.flatMap((p) => p.todos).map((t) => <TodoItem key={t.id} todo={t} />)}
+      {infQuery.data?.pages
+        .flatMap((p) => p.todos)
+        .map((t) => (
+          <TodoItem key={t.id} todo={t} />
+        ))}
       {infQuery.isFetchingNextPage && (
-        <div className="flex justify-center py-4"><Loader2 className="h-4 w-4 animate-spin" /></div>
+        <div className="flex justify-center py-4">
+          <Loader2 className="h-4 w-4 animate-spin" />
+        </div>
       )}
       {!infQuery.hasNextPage && infQuery.data && (
-        <div className="text-center text-xs text-muted-foreground py-3">No more</div>
+        <div className="text-center text-xs text-muted-foreground py-3">
+          No more
+        </div>
       )}
       <div ref={sentinel} className="h-8" />
-      {infQuery.data && infQuery.data.pages.every((p) => p.todos.length === 0) ? <Empty searchActive={!!filters.search} /> : null}
+      {infQuery.data &&
+      infQuery.data.pages.every((p) => p.todos.length === 0) ? (
+        <Empty searchActive={!!filters.search} />
+      ) : null}
     </div>
   );
 }

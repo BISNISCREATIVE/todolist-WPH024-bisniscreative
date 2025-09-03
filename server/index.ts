@@ -12,7 +12,12 @@ export function createServer() {
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  app.use((req, _res, next) => { try { console.log(`[api] ${req.method} ${req.path}`); } catch {} next(); });
+  app.use((req, _res, next) => {
+    try {
+      console.log(`[api] ${req.method} ${req.path}`);
+    } catch {}
+    next();
+  });
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {

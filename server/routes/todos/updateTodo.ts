@@ -11,7 +11,11 @@ export const updateTodo: RequestHandler = (req, res) => {
     const store = getTodosStore();
     const idx = store.findIndex((t) => t.id === id);
     if (idx === -1) return res.status(404).json({ error: "NotFound" });
-    const updated = { ...store[idx], ...patch, updatedAt: dayjs().toISOString() };
+    const updated = {
+      ...store[idx],
+      ...patch,
+      updatedAt: dayjs().toISOString(),
+    };
     const next = [...store];
     next[idx] = updated;
     setTodosStore(next);

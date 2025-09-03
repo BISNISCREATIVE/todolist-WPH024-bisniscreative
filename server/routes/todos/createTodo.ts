@@ -9,7 +9,9 @@ export const createTodo: RequestHandler = (req, res) => {
     const input = CreateTodoSchema.parse(req.body);
     const now = dayjs().toISOString();
     const todo: Todo = {
-      id: globalThis.crypto?.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2),
+      id: globalThis.crypto?.randomUUID
+        ? crypto.randomUUID()
+        : Math.random().toString(36).slice(2),
       title: input.title,
       completed: input.completed ?? false,
       date: input.date ?? null,

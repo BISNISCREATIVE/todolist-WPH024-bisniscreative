@@ -31,7 +31,9 @@ export const UpdateTodoSchema = z.object({
 export type UpdateTodoInput = z.infer<typeof UpdateTodoSchema>;
 
 export const FiltersSchema = z.object({
-  completed: z.union([z.literal("all"), z.literal("active"), z.literal("completed")]).optional(),
+  completed: z
+    .union([z.literal("all"), z.literal("active"), z.literal("completed")])
+    .optional(),
   priority: z.union([z.literal("all"), PriorityEnum]).optional(),
   dateGte: z.string().datetime().optional(),
   dateLte: z.string().datetime().optional(),
@@ -41,16 +43,20 @@ export const FiltersSchema = z.object({
 });
 export type Filters = z.infer<typeof FiltersSchema>;
 
-export const PageQuerySchema = z.object({
-  page: z.coerce.number().int().min(1).default(1),
-  limit: z.coerce.number().int().min(1).max(100).default(10),
-}).and(FiltersSchema.partial());
+export const PageQuerySchema = z
+  .object({
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(10),
+  })
+  .and(FiltersSchema.partial());
 export type PageQuery = z.infer<typeof PageQuerySchema>;
 
-export const CursorQuerySchema = z.object({
-  nextCursor: z.union([z.string(), z.null()]).optional(),
-  limit: z.coerce.number().int().min(1).max(50).default(10),
-}).and(FiltersSchema.partial());
+export const CursorQuerySchema = z
+  .object({
+    nextCursor: z.union([z.string(), z.null()]).optional(),
+    limit: z.coerce.number().int().min(1).max(50).default(10),
+  })
+  .and(FiltersSchema.partial());
 export type CursorQuery = z.infer<typeof CursorQuerySchema>;
 
 export interface PageResponse {

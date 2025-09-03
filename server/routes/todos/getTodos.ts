@@ -8,16 +8,22 @@ function applyFilters(list: Todo[], q: any): Todo[] {
   let out = [...list];
   const { completed, priority, dateGte, dateLte, search } = q;
   if (completed && completed !== "all") {
-    out = out.filter((t) => (completed === "completed" ? t.completed : !t.completed));
+    out = out.filter((t) =>
+      completed === "completed" ? t.completed : !t.completed,
+    );
   }
   if (priority && priority !== "all") {
     out = out.filter((t) => t.priority === priority);
   }
   if (dateGte) {
-    out = out.filter((t) => (t.date ? dayjs(t.date).isAfter(dayjs(dateGte).subtract(1, "ms")) : true));
+    out = out.filter((t) =>
+      t.date ? dayjs(t.date).isAfter(dayjs(dateGte).subtract(1, "ms")) : true,
+    );
   }
   if (dateLte) {
-    out = out.filter((t) => (t.date ? dayjs(t.date).isBefore(dayjs(dateLte).add(1, "ms")) : true));
+    out = out.filter((t) =>
+      t.date ? dayjs(t.date).isBefore(dayjs(dateLte).add(1, "ms")) : true,
+    );
   }
   if (search) {
     const s = String(search).toLowerCase();
@@ -26,11 +32,17 @@ function applyFilters(list: Todo[], q: any): Todo[] {
   return out;
 }
 
-function sortTodos(list: Todo[], sort?: string, order: "asc" | "desc" = "asc"): Todo[] {
+function sortTodos(
+  list: Todo[],
+  sort?: string,
+  order: "asc" | "desc" = "asc",
+): Todo[] {
   const dir = order === "asc" ? 1 : -1;
   if (sort === "priority") {
     const rank: Record<string, number> = { low: 1, medium: 2, high: 3 };
-    return [...list].sort((a, b) => (rank[a.priority] - rank[b.priority]) * dir);
+    return [...list].sort(
+      (a, b) => (rank[a.priority] - rank[b.priority]) * dir,
+    );
   }
   // default sort by date then createdAt
   return [...list].sort((a, b) => {
@@ -54,11 +66,20 @@ export const getTodos: RequestHandler = (req, res) => {
     const hasNextPage = start + q.limit < totalTodos;
     const nextPage = hasNextPage ? q.page + 1 : null;
 
-    const payload: PageResponse = { todos: pageTodos, totalTodos, hasNextPage, nextPage };
-    try { console.log(`[api] /todos ok page=${q.page} items=${pageTodos.length}`); } catch {}
+    const payload: PageResponse = {
+      todos: pageTodos,
+      totalTodos,
+      hasNextPage,
+      nextPage,
+    };
+    try {
+      console.log(`[api] /todos ok page=${q.page} items=${pageTodos.length}`);
+    } catch {}
     res.json(payload);
   } catch (error) {
-    try { console.error("/todos error", error); } catch {}
+    try {
+      console.error("/todos error", error);
+    } catch {}
     handleZodErrorResponse(res, error);
   }
 };

@@ -1,7 +1,18 @@
 import { useMemo } from "react";
-import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useAppSelector } from "@/store";
-import type { CursorResponse, PageResponse, Todo, CreateTodoInput, UpdateTodoInput } from "@shared/todos";
+import type {
+  CursorResponse,
+  PageResponse,
+  Todo,
+  CreateTodoInput,
+  UpdateTodoInput,
+} from "@shared/todos";
 import { toast } from "sonner";
 
 function buildQueryParams(obj: Record<string, any>) {
@@ -59,14 +70,18 @@ export function useTodosData() {
       return res.json();
     },
     initialPageParam: null,
-    getNextPageParam: (last) => last.hasNextPage ? last.nextCursor : null,
+    getNextPageParam: (last) => (last.hasNextPage ? last.nextCursor : null),
     enabled: filters.viewMode === "scroll",
     staleTime: 5_000,
   });
 
   const addMutation = useMutation({
     mutationFn: async (input: CreateTodoInput) => {
-      const res = await fetch("/todos", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(input) });
+      const res = await fetch("/todos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(input),
+      });
       if (!res.ok) throw new Error("Failed to create");
       return res.json() as Promise<Todo>;
     },
@@ -88,10 +103,16 @@ export function useTodosData() {
           queryClient.setQueryData(queryKey, copy);
         }
       } else {
-        const prev = queryClient.getQueryData<{ pages: CursorResponse[]; pageParams: any[] }>(queryKey);
+        const prev = queryClient.getQueryData<{
+          pages: CursorResponse[];
+          pageParams: any[];
+        }>(queryKey);
         if (prev) {
           const first = prev.pages[0];
-          const nextPages = [{ ...first, todos: [optimistic, ...first.todos] }, ...prev.pages.slice(1)];
+          const nextPages = [
+            { ...first, todos: [optimistic, ...first.todos] },
+            ...prev.pages.slice(1),
+          ];
           queryClient.setQueryData(queryKey, { ...prev, pages: nextPages });
         }
       }
@@ -106,51 +127,95 @@ export function useTodosData() {
 
   const toggleMutation = useMutation({
     mutationFn: async (todo: Todo) => {
-      const res = await fetch(`/todos/${todo.id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ completed: !todo.completed }) });
+      const res = await fetch(`/todos/${todo.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ completed: !todo.completed }),
+      });
       if (!res.ok) throw new Error("Failed to update");
       return res.json() as Promise<Todo>;
     },
     onMutate: async (todo) => {
       await queryClient.cancelQueries({ queryKey });
-      const updateIn = (list: Todo[]) => list.map((t) => (t.id === todo.id ? { ...t, completed: !t.completed } : t));
+      const updateIn = (list: Todo[]) =>
+        list.map((t) =>
+          t.id === todo.id ? { ...t, completed: !t.completed } : t,
+        );
       if (filters.viewMode === "page") {
         const prev = queryClient.getQueryData<PageResponse>(queryKey);
-        if (prev) queryClient.setQueryData(queryKey, { ...prev, todos: updateIn(prev.todos) });
+        if (prev)
+          queryClient.setQueryData(queryKey, {
+            ...prev,
+            todos: updateIn(prev.todos),
+          });
       } else {
-        const prev = queryClient.getQueryData<{ pages: CursorResponse[]; pageParams: any[] }>(queryKey);
+        const prev = queryClient.getQueryData<{
+          pages: CursorResponse[];
+          pageParams: any[];
+        }>(queryKey);
         if (prev) {
-          const pages = prev.pages.map((p) => ({ ...p, todos: updateIn(p.todos) }));
+          const pages = prev.pages.map((p) => ({
+            ...p,
+            todos: updateIn(p.todos),
+          }));
           queryClient.setQueryData(queryKey, { ...prev, pages });
         }
       }
       return { queryKey };
     },
-    onError: () => { toast.error("Failed to update"); queryClient.invalidateQueries({ queryKey }); },
+    onError: () => {
+      toast.error("Failed to update");
+      queryClient.invalidateQueries({ queryKey });
+    },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, patch }: { id: string; patch: UpdateTodoInput }) => {
-      const res = await fetch(`/todos/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
+    mutationFn: async ({
+      id,
+      patch,
+    }: {
+      id: string;
+      patch: UpdateTodoInput;
+    }) => {
+      const res = await fetch(`/todos/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(patch),
+      });
       if (!res.ok) throw new Error("Failed to update");
       return res.json() as Promise<Todo>;
     },
     onMutate: async ({ id, patch }) => {
       await queryClient.cancelQueries({ queryKey });
-      const apply = (list: Todo[]) => list.map((t) => (t.id === id ? { ...t, ...patch } : t));
+      const apply = (list: Todo[]) =>
+        list.map((t) => (t.id === id ? { ...t, ...patch } : t));
       if (filters.viewMode === "page") {
         const prev = queryClient.getQueryData<PageResponse>(queryKey);
-        if (prev) queryClient.setQueryData(queryKey, { ...prev, todos: apply(prev.todos) });
+        if (prev)
+          queryClient.setQueryData(queryKey, {
+            ...prev,
+            todos: apply(prev.todos),
+          });
       } else {
-        const prev = queryClient.getQueryData<{ pages: CursorResponse[]; pageParams: any[] }>(queryKey);
+        const prev = queryClient.getQueryData<{
+          pages: CursorResponse[];
+          pageParams: any[];
+        }>(queryKey);
         if (prev) {
-          const pages = prev.pages.map((p) => ({ ...p, todos: apply(p.todos) }));
+          const pages = prev.pages.map((p) => ({
+            ...p,
+            todos: apply(p.todos),
+          }));
           queryClient.setQueryData(queryKey, { ...prev, pages });
         }
       }
       return { queryKey };
     },
-    onError: () => { toast.error("Failed to update"); queryClient.invalidateQueries({ queryKey }); },
+    onError: () => {
+      toast.error("Failed to update");
+      queryClient.invalidateQueries({ queryKey });
+    },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
@@ -164,19 +229,40 @@ export function useTodosData() {
       await queryClient.cancelQueries({ queryKey });
       if (filters.viewMode === "page") {
         const prev = queryClient.getQueryData<PageResponse>(queryKey);
-        if (prev) queryClient.setQueryData(queryKey, { ...prev, todos: prev.todos.filter((t) => t.id !== id) });
+        if (prev)
+          queryClient.setQueryData(queryKey, {
+            ...prev,
+            todos: prev.todos.filter((t) => t.id !== id),
+          });
       } else {
-        const prev = queryClient.getQueryData<{ pages: CursorResponse[]; pageParams: any[] }>(queryKey);
+        const prev = queryClient.getQueryData<{
+          pages: CursorResponse[];
+          pageParams: any[];
+        }>(queryKey);
         if (prev) {
-          const pages = prev.pages.map((p) => ({ ...p, todos: p.todos.filter((t) => t.id !== id) }));
+          const pages = prev.pages.map((p) => ({
+            ...p,
+            todos: p.todos.filter((t) => t.id !== id),
+          }));
           queryClient.setQueryData(queryKey, { ...prev, pages });
         }
       }
       return { queryKey };
     },
-    onError: () => { toast.error("Failed to delete"); queryClient.invalidateQueries({ queryKey }); },
+    onError: () => {
+      toast.error("Failed to delete");
+      queryClient.invalidateQueries({ queryKey });
+    },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
-  return { filters, pageQuery, infQuery, addMutation, toggleMutation, deleteMutation, updateMutation };
+  return {
+    filters,
+    pageQuery,
+    infQuery,
+    addMutation,
+    toggleMutation,
+    deleteMutation,
+    updateMutation,
+  };
 }

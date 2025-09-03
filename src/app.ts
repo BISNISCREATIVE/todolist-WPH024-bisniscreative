@@ -1,6 +1,12 @@
 import express from "express";
 import cors from "cors";
-import { getTodos, getScrollTodos, createTodo, updateTodo, deleteTodo } from "./routes/todos";
+import {
+  getTodos,
+  getScrollTodos,
+  createTodo,
+  updateTodo,
+  deleteTodo,
+} from "./routes/todos";
 
 export function createApp() {
   const app = express();

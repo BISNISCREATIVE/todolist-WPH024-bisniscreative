@@ -31,14 +31,32 @@ export default function Index() {
       <div className="max-w-2xl lg:max-w-3xl mx-auto p-4 space-y-4">
         <header className="space-y-1">
           <h1 className="text-2xl font-bold">What's on Your Plan Today?</h1>
-          <p className="text-sm text-muted-foreground">Your productivity starts now.</p>
+          <p className="text-sm text-muted-foreground">
+            Your productivity starts now.
+          </p>
         </header>
 
-        <Tabs value={f.completed === "completed" ? "completed" : f.dateGte ? (dayjs(f.dateGte).isAfter(dayjs(), "day") ? "upcoming" : "today") : "today"}>
+        <Tabs
+          value={
+            f.completed === "completed"
+              ? "completed"
+              : f.dateGte
+                ? dayjs(f.dateGte).isAfter(dayjs(), "day")
+                  ? "upcoming"
+                  : "today"
+                : "today"
+          }
+        >
           <TabsList className="w-full grid grid-cols-3">
-            <TabsTrigger value="today" onClick={setToday}>Today</TabsTrigger>
-            <TabsTrigger value="upcoming" onClick={setUpcoming}>Upcoming</TabsTrigger>
-            <TabsTrigger value="completed" onClick={setCompletedOnly}>Completed</TabsTrigger>
+            <TabsTrigger value="today" onClick={setToday}>
+              Today
+            </TabsTrigger>
+            <TabsTrigger value="upcoming" onClick={setUpcoming}>
+              Upcoming
+            </TabsTrigger>
+            <TabsTrigger value="completed" onClick={setCompletedOnly}>
+              Completed
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="today" />
           <TabsContent value="upcoming" />

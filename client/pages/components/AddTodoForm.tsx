@@ -2,7 +2,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import dayjs from "dayjs";
 import { useTodosData } from "@/hooks/useTodos";
 
@@ -15,7 +21,11 @@ export default function AddTodoForm() {
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim()) return;
-    addMutation.mutate({ title: title.trim(), priority: priority as any, date: date ? dayjs(date).toISOString() : undefined });
+    addMutation.mutate({
+      title: title.trim(),
+      priority: priority as any,
+      date: date ? dayjs(date).toISOString() : undefined,
+    });
     setTitle("");
     setPriority("low");
     setDate("");
@@ -25,7 +35,12 @@ export default function AddTodoForm() {
     <form onSubmit={submit} className="grid gap-2 md:grid-cols-4 items-end">
       <div className="md:col-span-2">
         <Label htmlFor="title">Title</Label>
-        <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Add a new task..." />
+        <Input
+          id="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Add a new task..."
+        />
       </div>
       <div>
         <Label>Priority</Label>
@@ -42,10 +57,16 @@ export default function AddTodoForm() {
       </div>
       <div>
         <Label>Date</Label>
-        <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+        <Input
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+        />
       </div>
       <div className="md:col-span-4">
-        <Button type="submit" className="w-full">+ Add Task</Button>
+        <Button type="submit" className="w-full">
+          + Add Task
+        </Button>
       </div>
     </form>
   );

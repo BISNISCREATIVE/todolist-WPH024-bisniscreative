@@ -3,8 +3,21 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 import dayjs from "dayjs";
 import { useTodosData } from "@/hooks/useTodos";
 import { toast } from "sonner";
@@ -15,7 +28,11 @@ export default function AddTaskDialog() {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState<string>("");
   const [date, setDate] = useState<string>("");
-  const [errors, setErrors] = useState<{ title?: string; priority?: string; date?: string }>({});
+  const [errors, setErrors] = useState<{
+    title?: string;
+    priority?: string;
+    date?: string;
+  }>({});
 
   const validate = () => {
     const next: typeof errors = {};
@@ -29,7 +46,11 @@ export default function AddTaskDialog() {
     e.preventDefault();
     if (!validate()) return;
     addMutation.mutate(
-      { title: title.trim(), priority: priority as any, date: date ? dayjs(date).toISOString() : undefined },
+      {
+        title: title.trim(),
+        priority: priority as any,
+        date: date ? dayjs(date).toISOString() : undefined,
+      },
       {
         onSuccess: () => {
           toast.success("Task Added!");
@@ -55,8 +76,15 @@ export default function AddTaskDialog() {
         <form onSubmit={submit} className="space-y-3">
           <div>
             <Label htmlFor="task">Enter your task</Label>
-            <Textarea id="task" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Enter your task" />
-            {errors.title ? <p className="text-xs text-red-500 mt-1">{errors.title}</p> : null}
+            <Textarea
+              id="task"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Enter your task"
+            />
+            {errors.title ? (
+              <p className="text-xs text-red-500 mt-1">{errors.title}</p>
+            ) : null}
           </div>
           <div>
             <Label>Select priority</Label>
@@ -70,17 +98,31 @@ export default function AddTaskDialog() {
                 <SelectItem value="high">High</SelectItem>
               </SelectContent>
             </Select>
-            {errors.priority ? <p className="text-xs text-red-500 mt-1">{errors.priority}</p> : null}
+            {errors.priority ? (
+              <p className="text-xs text-red-500 mt-1">{errors.priority}</p>
+            ) : null}
           </div>
           <div>
             <Label>Select date</Label>
-            <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            <Input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
           </div>
           <div className="flex gap-2 pt-2">
             <DialogClose asChild>
-              <Button type="button" variant="secondary" className="w-1/2">Cancel</Button>
+              <Button type="button" variant="secondary" className="w-1/2">
+                Cancel
+              </Button>
             </DialogClose>
-            <Button type="submit" className="w-1/2" disabled={addMutation.isPending}>Save</Button>
+            <Button
+              type="submit"
+              className="w-1/2"
+              disabled={addMutation.isPending}
+            >
+              Save
+            </Button>
           </div>
         </form>
       </DialogContent>
