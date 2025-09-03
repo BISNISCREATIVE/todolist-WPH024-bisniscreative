@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import dayjs from "dayjs";
-import { CursorQuerySchema, CursorResponse, Todo } from "@shared/todos";
+import { CursorQuerySchema, CursorResponse, Todo } from "../../../shared/todos";
 import { getTodosStore } from "./store";
 import { handleZodErrorResponse } from "../../utils/error";
 
