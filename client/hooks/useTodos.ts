@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAppSelector } from "@/store";
-import type { CursorResponse, PageResponse, Todo, CreateTodoInput } from "@shared/todos";
+import type { CursorResponse, PageResponse, Todo, CreateTodoInput, UpdateTodoInput } from "@shared/todos";
 import { toast } from "sonner";
 
 function buildQueryParams(obj: Record<string, any>) {
@@ -129,6 +129,31 @@ export function useTodosData() {
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, patch }: { id: string; patch: UpdateTodoInput }) => {
+      const res = await fetch(`/api/todos/${id}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(patch) });
+      if (!res.ok) throw new Error("Failed to update");
+      return res.json() as Promise<Todo>;
+    },
+    onMutate: async ({ id, patch }) => {
+      await queryClient.cancelQueries({ queryKey });
+      const apply = (list: Todo[]) => list.map((t) => (t.id === id ? { ...t, ...patch } : t));
+      if (filters.viewMode === "page") {
+        const prev = queryClient.getQueryData<PageResponse>(queryKey);
+        if (prev) queryClient.setQueryData(queryKey, { ...prev, todos: apply(prev.todos) });
+      } else {
+        const prev = queryClient.getQueryData<{ pages: CursorResponse[]; pageParams: any[] }>(queryKey);
+        if (prev) {
+          const pages = prev.pages.map((p) => ({ ...p, todos: apply(p.todos) }));
+          queryClient.setQueryData(queryKey, { ...prev, pages });
+        }
+      }
+      return { queryKey };
+    },
+    onError: () => { toast.error("Failed to update"); queryClient.invalidateQueries({ queryKey }); },
+    onSettled: () => queryClient.invalidateQueries({ queryKey }),
+  });
+
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const res = await fetch(`/api/todos/${id}`, { method: "DELETE" });
@@ -153,5 +178,5 @@ export function useTodosData() {
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
-  return { filters, pageQuery, infQuery, addMutation, toggleMutation, deleteMutation };
+  return { filters, pageQuery, infQuery, addMutation, toggleMutation, deleteMutation, updateMutation };
 }
