@@ -53,7 +53,7 @@ export default function TodoList() {
         <div className="text-center text-xs text-muted-foreground py-3">No more</div>
       )}
       <div ref={sentinel} className="h-8" />
-      {infQuery.data && infQuery.data.pages.every((p) => p.todos.length === 0) ? <Empty /> : null}
+      {infQuery.data && infQuery.data.pages.every((p) => p.todos.length === 0) ? <Empty searchActive={!!filters.search} /> : null}
     </div>
   );
 }
