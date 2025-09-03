@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppDispatch, useAppSelector } from "@/store";
 import { setCompleted, setDateRange } from "@/store/filtersSlice";
 import FiltersBar from "./components/FiltersBar";
-import AddTodoForm from "./components/AddTodoForm";
+import AddTaskDialog from "./components/AddTaskDialog";
 import TodoList from "./components/TodoList";
 import dayjs from "dayjs";
 
