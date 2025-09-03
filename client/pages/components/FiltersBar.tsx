@@ -13,7 +13,12 @@ export default function FiltersBar() {
     <div className="grid gap-2 md:grid-cols-6">
       <div className="md:col-span-2">
         <Label>Search</Label>
-        <Input value={f.search} onChange={(e) => dispatch(setSearch(e.target.value))} placeholder="Search..." />
+        <div className="relative">
+          <Input value={f.search} onChange={(e) => dispatch(setSearch(e.target.value))} placeholder="Search..." />
+          {f.search && (
+            <button type="button" aria-label="Clear" className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground text-sm" onClick={() => dispatch(setSearch(""))}>×</button>
+          )}
+        </div>
       </div>
       <div>
         <Label>Completed</Label>
