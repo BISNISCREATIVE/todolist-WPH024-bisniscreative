@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
 import dayjs from "dayjs";
-import { PageQuerySchema, PageResponse, Todo } from "@shared/todos";
+import { PageQuerySchema, PageResponse, Todo } from "../../../shared/todos";
 import { getTodosStore } from "./store";
 import { handleZodErrorResponse } from "../../utils/error";
 
