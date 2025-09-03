@@ -55,8 +55,10 @@ export const getTodos: RequestHandler = (req, res) => {
     const nextPage = hasNextPage ? q.page + 1 : null;
 
     const payload: PageResponse = { todos: pageTodos, totalTodos, hasNextPage, nextPage };
+    try { console.log(`[api] /todos ok page=${q.page} items=${pageTodos.length}`); } catch {}
     res.json(payload);
   } catch (error) {
+    try { console.error("/todos error", error); } catch {}
     handleZodErrorResponse(res, error);
   }
 };
