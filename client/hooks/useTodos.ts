@@ -149,7 +149,7 @@ export function useTodosData() {
       }
       return { queryKey };
     },
-    onError: () => queryClient.invalidateQueries({ queryKey }),
+    onError: () => { toast.error("Failed to delete"); queryClient.invalidateQueries({ queryKey }); },
     onSettled: () => queryClient.invalidateQueries({ queryKey }),
   });
 
