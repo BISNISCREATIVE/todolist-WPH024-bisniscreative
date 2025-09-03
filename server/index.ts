@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { registerTodosRoutes } from "./routes/todos";
+import { createApp as createPublicTodosApp } from "../src/app";
 
 export function createServer() {
   const app = express();
@@ -21,8 +22,12 @@ export function createServer() {
 
   app.get("/api/demo", handleDemo);
 
-  // Todos API
+  // Todos API (with /api prefix)
   registerTodosRoutes(app);
+
+  // Public API without /api prefix (matches requested VSCode src structure): /todos, /todos/scroll, ...
+  const publicApi = createPublicTodosApp();
+  app.use("/", publicApi);
 
   return app;
 }
