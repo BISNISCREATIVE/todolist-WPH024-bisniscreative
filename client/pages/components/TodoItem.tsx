@@ -1,10 +1,17 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { MoreHorizontal, Trash, Pencil } from "lucide-react";
 import dayjs from "dayjs";
 import type { Todo } from "@shared/todos";
 import { useTodosData } from "@/hooks/useTodos";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { toast } from "sonner";
 
 function PriorityBadge({ p }: { p: Todo["priority"] }) {
   const color = p === "high" ? "bg-pink-600" : p === "medium" ? "bg-yellow-500" : "bg-green-600";
@@ -12,7 +19,18 @@ function PriorityBadge({ p }: { p: Todo["priority"] }) {
 }
 
 export default function TodoItem({ todo }: { todo: Todo }) {
-  const { toggleMutation, deleteMutation } = useTodosData();
+  const { toggleMutation, deleteMutation, updateMutation } = useTodosData();
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState(todo.title);
+  const [priority, setPriority] = useState<Todo["priority"]>(todo.priority);
+  const [date, setDate] = useState<string>(todo.date ? dayjs(todo.date).format("YYYY-MM-DD") : "");
+
+  const onDelete = () => deleteMutation.mutate(todo.id, { onSuccess: () => toast.success("Task removed") });
+  const onUpdate = (e: React.FormEvent) => {
+    e.preventDefault();
+    updateMutation.mutate({ id: todo.id, patch: { title, priority, date: date ? dayjs(date).toISOString() : null } }, { onSuccess: () => { toast.success("Changes saved"); setOpen(false); } });
+  };
+
   return (
     <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-4 flex items-start gap-3">
       <Checkbox checked={todo.completed} onCheckedChange={() => toggleMutation.mutate(todo)} />
@@ -23,14 +41,47 @@ export default function TodoItem({ todo }: { todo: Todo }) {
           <PriorityBadge p={todo.priority} />
         </div>
       </div>
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate(todo.id)}>
-          <Trash className="h-4 w-4" />
-        </Button>
-        <Button variant="ghost" size="icon">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem onClick={() => setOpen(true)} className="flex items-center gap-2"><Pencil className="h-3.5 w-3.5" /> Edit</DropdownMenuItem>
+          <DropdownMenuItem onClick={onDelete} className="text-red-600 flex items-center gap-2"><Trash className="h-3.5 w-3.5" /> Delete</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="sm:max-w-md w-[92vw]">
+          <DialogHeader>
+            <DialogTitle>Edit Task</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={onUpdate} className="space-y-3">
+            <div>
+              <Label htmlFor={`t-${todo.id}`}>Enter your task</Label>
+              <Input id={`t-${todo.id}`} value={title} onChange={(e) => setTitle(e.target.value)} />
+            </div>
+            <div>
+              <Label>Select priority</Label>
+              <Select value={priority} onValueChange={(v) => setPriority(v as any)}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Select date</Label>
+              <Input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
+            <Button type="submit" className="w-full">Save</Button>
+          </form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
