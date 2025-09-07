@@ -76,7 +76,7 @@ export default function TodoList() {
         ))}
       {infQuery.isFetchingNextPage && (
         <div className="flex justify-center py-4">
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <ThreeDotsWave />
         </div>
       )}
       {!infQuery.hasNextPage && infQuery.data && (
