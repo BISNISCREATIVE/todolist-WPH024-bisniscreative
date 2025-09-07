@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 import TodoItem from "./TodoItem";
 import { useTodosData } from "@/hooks/useTodos";
 import { useAppDispatch, useAppSelector } from "@/store";
