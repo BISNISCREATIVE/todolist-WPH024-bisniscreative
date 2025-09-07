@@ -47,18 +47,23 @@ function PriorityBadge({ p }: { p: Todo["priority"] }) {
 export default function TodoItem({ todo }: { todo: Todo }) {
   const { toggleMutation, deleteMutation, updateMutation } = useTodosData();
   const [open, setOpen] = useState(false);
+  const [working, setWorking] = useState(false);
   const [title, setTitle] = useState(todo.title);
   const [priority, setPriority] = useState<Todo["priority"]>(todo.priority);
   const [date, setDate] = useState<string>(
     todo.date ? dayjs(todo.date).format("YYYY-MM-DD") : "",
   );
 
-  const onDelete = () =>
+  const onDelete = () => {
+    setWorking(true);
     deleteMutation.mutate(todo.id, {
       onSuccess: () => toast.success("Task removed"),
+      onSettled: () => setWorking(false),
     });
+  };
   const onUpdate = (e: React.FormEvent) => {
     e.preventDefault();
+    setWorking(true);
     updateMutation.mutate(
       {
         id: todo.id,
@@ -73,6 +78,7 @@ export default function TodoItem({ todo }: { todo: Todo }) {
           toast.success("Changes saved");
           setOpen(false);
         },
+        onSettled: () => setWorking(false),
       },
     );
   };
