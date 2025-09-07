@@ -28,6 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
+import ThreeDotsWave from "@/components/loaders/ThreeDotsWave";
 
 function PriorityBadge({ p }: { p: Todo["priority"] }) {
   const color =
