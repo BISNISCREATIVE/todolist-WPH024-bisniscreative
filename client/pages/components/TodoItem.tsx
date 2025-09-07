@@ -87,7 +87,11 @@ export default function TodoItem({ todo }: { todo: Todo }) {
     <div className="rounded-xl border bg-card text-card-foreground shadow-sm p-4 flex items-start gap-3">
       <Checkbox
         checked={todo.completed}
-        onCheckedChange={() => toggleMutation.mutate(todo)}
+        disabled={working}
+        onCheckedChange={() => {
+          setWorking(true);
+          toggleMutation.mutate(todo, { onSettled: () => setWorking(false) });
+        }}
       />
       <div className="flex-1">
         <div
