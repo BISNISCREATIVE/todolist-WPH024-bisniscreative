@@ -4,6 +4,7 @@ import { setCompleted, setDateRange } from "@/store/filtersSlice";
 import FiltersBar from "./components/FiltersBar";
 import AddTaskDialog from "./components/AddTaskDialog";
 import TodoList from "./components/TodoList";
+import ThemeToggle from "@/components/ThemeToggle";
 import dayjs from "dayjs";
 
 export default function Index() {
