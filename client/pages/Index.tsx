@@ -1,11 +1,14 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAppDispatch, useAppSelector } from "@/store";
-import { setCompleted, setDateRange } from "@/store/filtersSlice";
+import { setCompleted, setDateRange, setLimit } from "@/store/filtersSlice";
 import FiltersBar from "./components/FiltersBar";
 import AddTaskDialog from "./components/AddTaskDialog";
 import TodoList from "./components/TodoList";
 import ThemeToggle from "@/components/ThemeToggle";
 import dayjs from "dayjs";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import ThreeDotsWave from "@/components/loaders/ThreeDotsWave";
 
 export default function Index() {
   const f = useAppSelector((s) => s.filters);
