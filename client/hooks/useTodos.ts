@@ -124,12 +124,11 @@ export function useTodosData() {
 
   const toggleMutation = useMutation({
     mutationFn: async (todo: Todo) => {
-      const res = await fetch(`/todos/${todo.id}`, {
+      const res = await apiFetch(`/todos/${todo.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ completed: !todo.completed }),
       });
-      if (!res.ok) throw new Error("Failed to update");
       return res.json() as Promise<Todo>;
     },
     onMutate: async (todo) => {
