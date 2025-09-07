@@ -14,20 +14,32 @@ export default function Index() {
   const f = useAppSelector((s) => s.filters);
   const dispatch = useAppDispatch();
 
+  const [switching, setSwitching] = useState(false);
+  const startSwitch = () => {
+    setSwitching(true);
+    setTimeout(() => setSwitching(false), 500);
+  };
+
   const setToday = () => {
+    startSwitch();
     const start = dayjs().startOf("day").toISOString();
     const end = dayjs().endOf("day").toISOString();
     dispatch(setCompleted("all"));
     dispatch(setDateRange({ gte: start, lte: end }));
+    dispatch(setLimit(10));
   };
   const setUpcoming = () => {
+    startSwitch();
     const start = dayjs().add(1, "day").startOf("day").toISOString();
     dispatch(setCompleted("all"));
     dispatch(setDateRange({ gte: start, lte: undefined }));
+    dispatch(setLimit(20));
   };
   const setCompletedOnly = () => {
+    startSwitch();
     dispatch(setCompleted("completed"));
     dispatch(setDateRange({ gte: undefined, lte: undefined }));
+    dispatch(setLimit(5));
   };
 
   return (
