@@ -75,12 +75,11 @@ export function useTodosData() {
 
   const addMutation = useMutation({
     mutationFn: async (input: CreateTodoInput) => {
-      const res = await fetch("/todos", {
+      const res = await apiFetch("/todos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(input),
       });
-      if (!res.ok) throw new Error("Failed to create");
       return res.json() as Promise<Todo>;
     },
     onMutate: async (variables) => {
