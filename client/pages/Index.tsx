@@ -30,61 +30,63 @@ export default function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="max-w-2xl lg:max-w-3xl mx-auto p-4 space-y-4">
-        <header className="space-y-1">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold">What's on Your Plan Today?</h1>
-              <p className="text-sm text-muted-foreground">Your productivity starts now.</p>
+    <QueryClientProvider client={queryClient}>
+      <div className="min-h-screen bg-background text-foreground">
+        <div className="max-w-2xl lg:max-w-3xl mx-auto p-4 space-y-4">
+          <header className="space-y-1">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold">What's on Your Plan Today?</h1>
+                <p className="text-sm text-muted-foreground">Your productivity starts now.</p>
+              </div>
+              <ThemeToggle />
             </div>
-            <ThemeToggle />
-          </div>
-        </header>
+          </header>
 
-        <Tabs
-          value={
-            f.completed === "completed"
-              ? "completed"
-              : f.dateGte
-                ? dayjs(f.dateGte).isAfter(dayjs(), "day")
-                  ? "upcoming"
+          <Tabs
+            value={
+              f.completed === "completed"
+                ? "completed"
+                : f.dateGte
+                  ? dayjs(f.dateGte).isAfter(dayjs(), "day")
+                    ? "upcoming"
+                    : "today"
                   : "today"
-                : "today"
-          }
-        >
-          <TabsList className="w-full grid grid-cols-3">
-            <TabsTrigger
-              value="today"
-              onClick={setToday}
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-            >
-              Today
-            </TabsTrigger>
-            <TabsTrigger
-              value="upcoming"
-              onClick={setUpcoming}
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-            >
-              Upcoming
-            </TabsTrigger>
-            <TabsTrigger
-              value="completed"
-              onClick={setCompletedOnly}
-              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
-            >
-              Completed
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="today" />
-          <TabsContent value="upcoming" />
-          <TabsContent value="completed" />
-        </Tabs>
+            }
+          >
+            <TabsList className="w-full grid grid-cols-3">
+              <TabsTrigger
+                value="today"
+                onClick={setToday}
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                Today
+              </TabsTrigger>
+              <TabsTrigger
+                value="upcoming"
+                onClick={setUpcoming}
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                Upcoming
+              </TabsTrigger>
+              <TabsTrigger
+                value="completed"
+                onClick={setCompletedOnly}
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+              >
+                Completed
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="today" />
+            <TabsContent value="upcoming" />
+            <TabsContent value="completed" />
+          </Tabs>
 
-        <FiltersBar />
-        <TodoList />
-        <AddTaskDialog />
+          <FiltersBar />
+          <TodoList />
+          <AddTaskDialog />
+        </div>
       </div>
-    </div>
+    </QueryClientProvider>
   );
 }
