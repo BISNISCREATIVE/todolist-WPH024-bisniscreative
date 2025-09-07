@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
 
-export default function ThreeDotsWave() {
+export default function ThreeDotsWave({
+  colors = ["bg-blue-500", "bg-green-500", "bg-red-500"],
+  size = 10,
+}: {
+  colors?: string[];
+  size?: number;
+}) {
   const dot = {
     initial: { y: 0, opacity: 0.7 },
     animate: (i: number) => ({
@@ -10,12 +16,15 @@ export default function ThreeDotsWave() {
     }),
   } as const;
 
+  const px = `${size}px`;
+
   return (
     <div className="flex items-center gap-2">
-      {["bg-blue-500", "bg-green-500", "bg-yellow-400"].map((c, i) => (
+      {colors.slice(0, 3).map((c, i) => (
         <motion.span
           key={i}
-          className={`inline-block h-2.5 w-2.5 rounded-full ${c}`}
+          className={`inline-block rounded-full ${c}`}
+          style={{ width: px, height: px }}
           variants={dot}
           custom={i}
           initial="initial"
