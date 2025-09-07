@@ -12,7 +12,12 @@ export default function ThreeDotsWave({
     animate: (i: number) => ({
       y: [0, -6, 0],
       opacity: [0.7, 1, 0.7],
-      transition: { duration: 0.6, repeat: Infinity, ease: "easeInOut", delay: i * 0.15 },
+      transition: {
+        duration: 0.6,
+        repeat: Infinity,
+        ease: "easeInOut",
+        delay: i * 0.15,
+      },
     }),
   } as const;
 

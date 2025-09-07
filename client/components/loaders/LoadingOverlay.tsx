@@ -23,7 +23,10 @@ export default function LoadingOverlay() {
           transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
         >
           <defs>
-            <path id="circlePath" d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0" />
+            <path
+              id="circlePath"
+              d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0"
+            />
           </defs>
           <text fontSize="7" letterSpacing="1" fill="currentColor">
             <textPath href="#circlePath">{repeated}</textPath>
@@ -35,7 +38,9 @@ export default function LoadingOverlay() {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <div className="text-sm font-semibold tracking-wide text-foreground">Loading</div>
+          <div className="text-sm font-semibold tracking-wide text-foreground">
+            Loading
+          </div>
         </motion.div>
       </div>
     </div>

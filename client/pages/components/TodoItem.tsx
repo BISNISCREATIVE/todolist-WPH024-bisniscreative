@@ -108,7 +108,10 @@ export default function TodoItem({ todo }: { todo: Todo }) {
       </div>
       {working ? (
         <div className="w-10 flex items-center justify-center">
-          <ThreeDotsWave colors={["bg-blue-500", "bg-green-500", "bg-red-500"]} size={8} />
+          <ThreeDotsWave
+            colors={["bg-blue-500", "bg-green-500", "bg-red-500"]}
+            size={8}
+          />
         </div>
       ) : (
         <DropdownMenu>

@@ -49,7 +49,9 @@ export default function Index() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-bold">What's on Your Plan Today?</h1>
-              <p className="text-sm text-muted-foreground">Your productivity starts now.</p>
+              <p className="text-sm text-muted-foreground">
+                Your productivity starts now.
+              </p>
             </div>
             <ThemeToggle />
           </div>
@@ -96,7 +98,13 @@ export default function Index() {
 
         <div className="flex items-center gap-2">
           <h2 className="text-xl font-semibold">
-            {f.completed === "completed" ? "Completed" : f.dateGte ? (dayjs(f.dateGte).isAfter(dayjs(), "day") ? "Upcoming" : "Today") : "Today"}
+            {f.completed === "completed"
+              ? "Completed"
+              : f.dateGte
+                ? dayjs(f.dateGte).isAfter(dayjs(), "day")
+                  ? "Upcoming"
+                  : "Today"
+                : "Today"}
           </h2>
           <span className="text-xs rounded-full bg-muted px-2 py-0.5">
             {f.limit} Item
@@ -116,7 +124,10 @@ export default function Index() {
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.25 }}
               >
-                <ThreeDotsWave colors={["bg-blue-500", "bg-green-500", "bg-red-500"]} size={12} />
+                <ThreeDotsWave
+                  colors={["bg-blue-500", "bg-green-500", "bg-red-500"]}
+                  size={12}
+                />
               </motion.div>
             )}
           </AnimatePresence>

@@ -23,7 +23,11 @@ export default function ThemeToggle() {
   return (
     <>
       {loading && (
-        <CircleTextOverlay text="List To Do" durationMs={900} colors={["bg-blue-500", "bg-red-500", "bg-yellow-400"]} />
+        <CircleTextOverlay
+          text="List To Do"
+          durationMs={900}
+          colors={["bg-blue-500", "bg-red-500", "bg-yellow-400"]}
+        />
       )}
       <div
         role="group"
@@ -42,7 +46,9 @@ export default function ThemeToggle() {
           onClick={() => trigger("light")}
           className="relative z-10 grid place-items-center h-7 w-7 rounded-full"
         >
-          <Sun className={`h-4 w-4 ${!isDark ? "text-primary-foreground" : "text-muted-foreground"}`} />
+          <Sun
+            className={`h-4 w-4 ${!isDark ? "text-primary-foreground" : "text-muted-foreground"}`}
+          />
           <span className="sr-only">Bright</span>
         </button>
         <button
@@ -51,7 +57,9 @@ export default function ThemeToggle() {
           onClick={() => trigger("dark")}
           className="relative z-10 grid place-items-center h-7 w-7 rounded-full"
         >
-          <Moon className={`h-4 w-4 ${isDark ? "text-primary-foreground" : "text-muted-foreground"}`} />
+          <Moon
+            className={`h-4 w-4 ${isDark ? "text-primary-foreground" : "text-muted-foreground"}`}
+          />
           <span className="sr-only">Dark</span>
         </button>
       </div>

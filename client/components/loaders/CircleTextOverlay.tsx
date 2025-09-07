@@ -32,7 +32,10 @@ export default function CircleTextOverlay({
           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
         >
           <defs>
-            <path id="circlePath2" d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0" />
+            <path
+              id="circlePath2"
+              d="M50,50 m-35,0 a35,35 0 1,1 70,0 a35,35 0 1,1 -70,0"
+            />
           </defs>
           <text fontSize="7" letterSpacing="1" fill="currentColor">
             <textPath href="#circlePath2">{repeated}</textPath>
