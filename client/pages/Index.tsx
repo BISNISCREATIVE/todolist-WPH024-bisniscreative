@@ -52,13 +52,25 @@ export default function Index() {
           }
         >
           <TabsList className="w-full grid grid-cols-3">
-            <TabsTrigger value="today" onClick={setToday}>
+            <TabsTrigger
+              value="today"
+              onClick={setToday}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
               Today
             </TabsTrigger>
-            <TabsTrigger value="upcoming" onClick={setUpcoming}>
+            <TabsTrigger
+              value="upcoming"
+              onClick={setUpcoming}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
               Upcoming
             </TabsTrigger>
-            <TabsTrigger value="completed" onClick={setCompletedOnly}>
+            <TabsTrigger
+              value="completed"
+              onClick={setCompletedOnly}
+              className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+            >
               Completed
             </TabsTrigger>
           </TabsList>
