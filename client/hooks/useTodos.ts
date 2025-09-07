@@ -174,12 +174,11 @@ export function useTodosData() {
       id: string;
       patch: UpdateTodoInput;
     }) => {
-      const res = await fetch(`/todos/${id}`, {
+      const res = await apiFetch(`/todos/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(patch),
       });
-      if (!res.ok) throw new Error("Failed to update");
       return res.json() as Promise<Todo>;
     },
     onMutate: async ({ id, patch }) => {
