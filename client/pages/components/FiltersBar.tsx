@@ -165,55 +165,55 @@ export default function FiltersBar() {
           </Select>
         </div>
         <div>
-        <Label>View</Label>
-        <Select
-          value={f.viewMode}
-          onValueChange={(v) => dispatch(setViewMode(v as any))}
-        >
-          <SelectTrigger>
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="page">Page</SelectItem>
-            <SelectItem value="scroll">Infinite</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-      {f.viewMode === "page" && (
-        <div>
-          <Label>Per Page</Label>
+          <Label>View</Label>
           <Select
-            value={String(f.limit)}
-            onValueChange={(v) => dispatch(setLimit(Number(v)))}
+            value={f.viewMode}
+            onValueChange={(v) => dispatch(setViewMode(v as any))}
           >
             <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="5">5</SelectItem>
-              <SelectItem value="10">10</SelectItem>
-              <SelectItem value="20">20</SelectItem>
+              <SelectItem value="page">Page</SelectItem>
+              <SelectItem value="scroll">Infinite</SelectItem>
             </SelectContent>
           </Select>
         </div>
-      )}
-      <div className="md:col-span-2">
-        <Label>Date From</Label>
-        <Input
-          type="date"
-          value={f.dateGte?.slice(0, 10) ?? ""}
-          onChange={(e) =>
-            dispatch(
-              setDateRange({
-                gte: e.target.value
-                  ? new Date(e.target.value).toISOString()
-                  : undefined,
-                lte: f.dateLte,
-              }),
-            )
-          }
-        />
-      </div>
+        {f.viewMode === "page" && (
+          <div>
+            <Label>Per Page</Label>
+            <Select
+              value={String(f.limit)}
+              onValueChange={(v) => dispatch(setLimit(Number(v)))}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5</SelectItem>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+        <div className="md:col-span-2">
+          <Label>Date From</Label>
+          <Input
+            type="date"
+            value={f.dateGte?.slice(0, 10) ?? ""}
+            onChange={(e) =>
+              dispatch(
+                setDateRange({
+                  gte: e.target.value
+                    ? new Date(e.target.value).toISOString()
+                    : undefined,
+                  lte: f.dateLte,
+                }),
+              )
+            }
+          />
+        </div>
         <div className="md:col-span-2">
           <Label>Date To</Label>
           <Input
