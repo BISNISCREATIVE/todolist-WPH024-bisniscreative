@@ -1,23 +1,47 @@
 import { Moon, Sun } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 export default function ThemeToggle() {
   const { theme, setTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
-
   if (!mounted) return null;
 
-  const isDark = (theme === "system" ? systemTheme : theme) === "dark";
-  const toggle = () => setTheme(isDark ? "light" : "dark");
+  const current = (theme === "system" ? systemTheme : theme) || "light";
+  const isDark = current === "dark";
 
   return (
-    <Button variant="ghost" size="icon" aria-label="Toggle theme" onClick={toggle}>
-      <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-      <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-      <span className="sr-only">Toggle theme</span>
-    </Button>
+    <div
+      role="group"
+      aria-label="Theme switch"
+      className="relative h-9 w-[76px] rounded-full border bg-muted/60 backdrop-blur px-1 flex items-center gap-1 shadow-inner"
+    >
+      <motion.div
+        layout
+        className="absolute h-7 w-7 rounded-full bg-primary shadow-sm"
+        style={{ left: isDark ? 40 : 4, top: 4 }}
+        transition={{ type: "spring", stiffness: 400, damping: 30 }}
+      />
+      <button
+        type="button"
+        aria-pressed={!isDark}
+        onClick={() => setTheme("light")}
+        className="relative z-10 grid place-items-center h-7 w-7 rounded-full"
+      >
+        <Sun className={`h-4 w-4 ${!isDark ? "text-primary-foreground" : "text-muted-foreground"}`} />
+        <span className="sr-only">Bright</span>
+      </button>
+      <button
+        type="button"
+        aria-pressed={isDark}
+        onClick={() => setTheme("dark")}
+        className="relative z-10 grid place-items-center h-7 w-7 rounded-full"
+      >
+        <Moon className={`h-4 w-4 ${isDark ? "text-primary-foreground" : "text-muted-foreground"}`} />
+        <span className="sr-only">Dark</span>
+      </button>
+    </div>
   );
 }
