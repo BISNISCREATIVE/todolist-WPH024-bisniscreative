@@ -19,6 +19,7 @@ const App = () => (
     <Provider store={store}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         <TooltipProvider>
+          <LoadingOverlay />
           <Toaster />
           <Sonner />
           <BrowserRouter>
