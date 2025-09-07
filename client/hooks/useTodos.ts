@@ -69,7 +69,9 @@ export function useTodosData() {
       return res.json();
     },
     initialPageParam: null,
-    getNextPageParam: (last) => (last.hasNextPage ? last.nextCursor : null),
+    getNextPageParam: (last) => (last && last.hasNextPage ? last.nextCursor : null),
+    placeholderData: { pages: [], pageParams: [null] } as any,
+    retry: 1,
     enabled: filters.viewMode === "scroll",
     staleTime: 5_000,
   });
