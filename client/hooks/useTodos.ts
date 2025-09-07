@@ -43,8 +43,7 @@ export function useTodosData() {
         order: filters.order,
         search: filters.search || undefined,
       });
-      const res = await fetch(`/todos?${qs}`);
-      if (!res.ok) throw new Error("Failed to fetch");
+      const res = await apiFetch(`/todos?${qs}`);
       return res.json();
     },
     enabled: filters.viewMode === "page",
