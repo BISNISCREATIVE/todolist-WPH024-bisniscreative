@@ -216,8 +216,7 @@ export function useTodosData() {
 
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
-      const res = await fetch(`/todos/${id}`, { method: "DELETE" });
-      if (!res.ok) throw new Error("Failed to delete");
+      const res = await apiFetch(`/todos/${id}`, { method: "DELETE" });
       return id;
     },
     onMutate: async (id) => {
