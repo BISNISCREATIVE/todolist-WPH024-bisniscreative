@@ -106,27 +106,33 @@ export default function TodoItem({ todo }: { todo: Todo }) {
           <PriorityBadge p={todo.priority} />
         </div>
       </div>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" aria-label="More actions">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-40">
-          <DropdownMenuItem
-            onClick={() => setOpen(true)}
-            className="flex items-center gap-2"
-          >
-            <Pencil className="h-3.5 w-3.5" /> Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={onDelete}
-            className="text-red-600 flex items-center gap-2"
-          >
-            <Trash className="h-3.5 w-3.5" /> Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      {working ? (
+        <div className="w-10 flex items-center justify-center">
+          <ThreeDotsWave colors={["bg-blue-500", "bg-green-500", "bg-red-500"]} size={8} />
+        </div>
+      ) : (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" aria-label="More actions">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-40">
+            <DropdownMenuItem
+              onClick={() => setOpen(true)}
+              className="flex items-center gap-2"
+            >
+              <Pencil className="h-3.5 w-3.5" /> Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={onDelete}
+              className="text-red-600 flex items-center gap-2"
+            >
+              <Trash className="h-3.5 w-3.5" /> Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-md w-[92vw]">
