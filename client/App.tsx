@@ -12,6 +12,7 @@ import { ThemeProvider } from "next-themes";
 import { store } from "./store";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import LoadingOverlay from "@/components/loaders/LoadingOverlay";
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
