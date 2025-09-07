@@ -64,8 +64,7 @@ export function useTodosData() {
         order: filters.order,
         search: filters.search || undefined,
       });
-      const res = await fetch(`/todos/scroll?${qs}`);
-      if (!res.ok) throw new Error("Failed to fetch");
+      const res = await apiFetch(`/todos/scroll?${qs}`);
       return res.json();
     },
     initialPageParam: null,
