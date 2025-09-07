@@ -94,8 +94,43 @@ export default function Index() {
           <TabsContent value="completed" />
         </Tabs>
 
+        <div className="flex items-center gap-2">
+          <h2 className="text-xl font-semibold">
+            {f.completed === "completed" ? "Completed" : f.dateGte ? (dayjs(f.dateGte).isAfter(dayjs(), "day") ? "Upcoming" : "Today") : "Today"}
+          </h2>
+          <span className="text-xs rounded-full bg-muted px-2 py-0.5">
+            {f.limit} Item
+          </span>
+        </div>
+
         <FiltersBar />
-        <TodoList />
+
+        <div className="relative min-h-10">
+          <AnimatePresence initial={false} mode="popLayout">
+            {switching && (
+              <motion.div
+                key="switch-loader"
+                className="absolute inset-0 grid place-items-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                <ThreeDotsWave colors={["bg-blue-500", "bg-green-500", "bg-red-500"]} size={12} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <motion.div
+            key={`${f.completed}-${f.dateGte ?? ""}`}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <TodoList />
+          </motion.div>
+        </div>
+
         <AddTaskDialog />
       </div>
     </div>
