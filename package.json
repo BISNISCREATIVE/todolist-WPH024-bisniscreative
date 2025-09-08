@@ -25,11 +25,11 @@
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "mysql2": "^3.11.3",
     "react-redux": "^9.2.0",
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "mysql2": "^3.11.3",
     "@hookform/resolvers": "^5.2.1",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-alert-dialog": "^1.1.14",
