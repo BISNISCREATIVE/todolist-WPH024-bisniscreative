@@ -7,6 +7,8 @@ import {
 } from "../../types/todos";
 import { getTodosStore } from "./store";
 import { handleZodErrorResponse } from "../../utils/error";
+import { getMySqlPool } from "./db";
+import { dbGetTodosPage } from "./dbRepo";
 
 function applyFilters(list: Todo[], q: any): Todo[] {
   let out = [...list];
@@ -56,9 +58,14 @@ function sortTodos(
   });
 }
 
-export const getTodos: RequestHandler = (req, res) => {
+export const getTodos: RequestHandler = async (req, res) => {
   try {
     const q = PageQuerySchema.parse(req.query);
+    const pool = await getMySqlPool();
+    if (pool) {
+      const data = await dbGetTodosPage(pool, q as any);
+      return res.json(data);
+    }
     const store = getTodosStore();
     const filtered = sortTodos(applyFilters(store, q), q.sort, q.order as any);
 
