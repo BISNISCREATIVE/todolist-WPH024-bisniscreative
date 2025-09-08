@@ -3,7 +3,12 @@ import type { Pool } from "mysql2/promise";
 let pool: Pool | null = null;
 
 export async function getMySqlPool() {
-  if (!process.env.MYSQL_HOST || !process.env.MYSQL_DATABASE || !process.env.MYSQL_USER) return null;
+  if (
+    !process.env.MYSQL_HOST ||
+    !process.env.MYSQL_DATABASE ||
+    !process.env.MYSQL_USER
+  )
+    return null;
   if (pool) return pool;
   const mysql = await import("mysql2/promise");
   pool = mysql.createPool({
