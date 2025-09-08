@@ -1,6 +1,10 @@
-import serverless from "serverless-http";
-import { createApp } from "../src/app";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { createServer } from "../server";
 
-// This exposes the same in-memory dummy API used in dev:
-// GET /api/todos, /api/todos/scroll, POST /api/todos, PUT /api/todos/:id, DELETE /api/todos/:id
-export default serverless(createApp());
+// Reuse a single Express instance across invocations
+const app = createServer();
+
+export default function handler(req: VercelRequest, res: VercelResponse) {
+  // Delegate to Express (supports both /api/todos and plain /todos via mounted apps)
+  (app as any)(req, res);
+}
