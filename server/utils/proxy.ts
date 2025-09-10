@@ -24,7 +24,9 @@ export function createExternalTodosProxy(base: string) {
       if (method !== "GET" && method !== "HEAD") {
         if (headers["content-type"]?.includes("application/json")) {
           body = JSON.stringify(req.body ?? {});
-        } else if (headers["content-type"]?.includes("application/x-www-form-urlencoded")) {
+        } else if (
+          headers["content-type"]?.includes("application/x-www-form-urlencoded")
+        ) {
           const params = new URLSearchParams(req.body ?? {});
           body = params.toString();
         } else {
@@ -32,11 +34,17 @@ export function createExternalTodosProxy(base: string) {
         }
       }
 
-      const resp = await fetch(url + (req.originalUrl.includes("?") ? req.originalUrl.slice(req.originalUrl.indexOf("?")) : ""), {
-        method,
-        headers,
-        body,
-      });
+      const resp = await fetch(
+        url +
+          (req.originalUrl.includes("?")
+            ? req.originalUrl.slice(req.originalUrl.indexOf("?"))
+            : ""),
+        {
+          method,
+          headers,
+          body,
+        },
+      );
 
       res.status(resp.status);
       // Copy headers selectively
