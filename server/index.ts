@@ -5,12 +5,14 @@ import { handleDemo } from "./routes/demo";
 import { registerTodosRoutes } from "./routes/todos";
 import { createApp as createPublicTodosApp } from "../src/app";
 import { createExternalTodosProxy } from "./utils/proxy";
+import { corsAll } from "./middleware/corsAll";
 
 export function createServer() {
   const app = express();
 
   // Middleware
   app.use(cors());
+  app.use(corsAll);
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use((req, _res, next) => {
