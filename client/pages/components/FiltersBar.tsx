@@ -8,6 +8,7 @@ import {
   setSearch,
   setSort,
   setViewMode,
+  setLimit,
 } from "@/store/filtersSlice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
