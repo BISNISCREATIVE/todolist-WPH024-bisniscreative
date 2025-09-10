@@ -54,8 +54,7 @@ export function useTodosData() {
   const infQuery = useInfiniteQuery<CursorResponse>({
     queryKey,
     queryFn: async ({ pageParam }) => {
-      const qs = buildQueryParams({
-        nextCursor: pageParam ?? null,
+      const base = {
         limit: filters.limit,
         completed: filters.completed,
         priority: filters.priority,
@@ -64,9 +63,25 @@ export function useTodosData() {
         sort: filters.sort,
         order: filters.order,
         search: filters.search || undefined,
-      });
-      const res = await apiFetch(`/todos/scroll?${qs}`);
-      return res.json();
+      } as const;
+
+      const qsScroll = buildQueryParams({ ...base, nextCursor: pageParam ?? null });
+      try {
+        const res = await apiFetch(`/todos/scroll?${qsScroll}`);
+        return res.json();
+      } catch {
+        // Fallback: use page endpoint and adapt to cursor shape
+        const qsPage = buildQueryParams({ ...base, page: pageParam ? 2 : 1 });
+        const r2 = await apiFetch(`/todos?${qsPage}`);
+        const page = (await r2.json()) as PageResponse;
+        const lastId = page.todos.length ? page.todos[page.todos.length - 1].id : null;
+        const adapted: CursorResponse = {
+          todos: page.todos,
+          nextCursor: page.hasNextPage ? lastId : null,
+          hasNextPage: page.hasNextPage,
+        };
+        return adapted;
+      }
     },
     initialPageParam: null,
     getNextPageParam: (last) =>
