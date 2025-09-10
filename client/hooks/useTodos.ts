@@ -65,7 +65,10 @@ export function useTodosData() {
         search: filters.search || undefined,
       } as const;
 
-      const qsScroll = buildQueryParams({ ...base, nextCursor: pageParam ?? null });
+      const qsScroll = buildQueryParams({
+        ...base,
+        nextCursor: pageParam ?? null,
+      });
       try {
         const res = await apiFetch(`/todos/scroll?${qsScroll}`);
         return res.json();
@@ -74,7 +77,9 @@ export function useTodosData() {
         const qsPage = buildQueryParams({ ...base, page: pageParam ? 2 : 1 });
         const r2 = await apiFetch(`/todos?${qsPage}`);
         const page = (await r2.json()) as PageResponse;
-        const lastId = page.todos.length ? page.todos[page.todos.length - 1].id : null;
+        const lastId = page.todos.length
+          ? page.todos[page.todos.length - 1].id
+          : null;
         const adapted: CursorResponse = {
           todos: page.todos,
           nextCursor: page.hasNextPage ? lastId : null,
