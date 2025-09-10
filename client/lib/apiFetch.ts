@@ -22,7 +22,10 @@ export async function apiFetch(input: string, init?: RequestInit) {
   };
 
   const isAbsolute = /^(https?:)?\/\//i.test(input);
-  const rawBases = (import.meta as any).env?.VITE_API_BASES || (import.meta as any).env?.VITE_API_BASE || "";
+  const rawBases =
+    (import.meta as any).env?.VITE_API_BASES ||
+    (import.meta as any).env?.VITE_API_BASE ||
+    "";
   const envBases = String(rawBases)
     .split(",")
     .map((s) => s.trim())
