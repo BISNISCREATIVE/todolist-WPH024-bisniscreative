@@ -6,7 +6,10 @@ export function getExternalApiBase(): string | null {
   try {
     // Basic validation
     const u = new URL(base.startsWith("http") ? base : `https://${base}`);
-    return u.origin + (u.pathname.endsWith("/") ? u.pathname.slice(0, -1) : u.pathname);
+    return (
+      u.origin +
+      (u.pathname.endsWith("/") ? u.pathname.slice(0, -1) : u.pathname)
+    );
   } catch {
     return DEFAULT_EXTERNAL_API;
   }

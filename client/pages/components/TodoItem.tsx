@@ -32,9 +32,17 @@ import ThreeDotsWave from "@/components/loaders/ThreeDotsWave";
 
 function PriorityBadge({ p }: { p: Todo["priority"] }) {
   const v = String(p).toLowerCase();
-  const color = v === "high" ? "bg-red-600" : v === "medium" ? "bg-yellow-500" : "bg-green-600";
+  const color =
+    v === "high"
+      ? "bg-red-600"
+      : v === "medium"
+        ? "bg-yellow-500"
+        : "bg-green-600";
   return (
-    <Badge variant="outline" className={`${color} text-white tracking-wide uppercase`}>
+    <Badge
+      variant="outline"
+      className={`${color} text-white tracking-wide uppercase`}
+    >
       {String(p)}
     </Badge>
   );
