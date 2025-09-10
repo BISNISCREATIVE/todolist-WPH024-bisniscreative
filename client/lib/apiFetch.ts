@@ -1,4 +1,7 @@
-const DEFAULT_EXTERNAL_API = "https://wph-024-api-todolist.vercel.app";
+const DEFAULT_EXTERNAL_APIS = [
+  "https://wph-024-api-todolist-at4ht2551-bisniscreatives-projects.vercel.app",
+  "https://wph-024-api-todolist.vercel.app",
+];
 
 function joinUrl(base: string, path: string) {
   if (!path) return base;
@@ -19,16 +22,20 @@ export async function apiFetch(input: string, init?: RequestInit) {
   };
 
   const isAbsolute = /^(https?:)?\/\//i.test(input);
-  const apiBase = (import.meta as any).env?.VITE_API_BASE || "";
+  const rawBases = (import.meta as any).env?.VITE_API_BASES || (import.meta as any).env?.VITE_API_BASE || "";
+  const envBases = String(rawBases)
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
   const candidates: string[] = [];
 
   if (isAbsolute) {
     candidates.push(input);
   } else {
-    if (apiBase) candidates.push(joinUrl(apiBase, input));
+    for (const b of envBases) candidates.push(joinUrl(b, input));
     candidates.push(input);
     candidates.push(input.startsWith("/api") ? input : `/api${input}`);
-    candidates.push(joinUrl(DEFAULT_EXTERNAL_API, input));
+    for (const b of DEFAULT_EXTERNAL_APIS) candidates.push(joinUrl(b, input));
   }
 
   let lastErr: any;
