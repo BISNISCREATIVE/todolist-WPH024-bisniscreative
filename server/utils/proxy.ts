@@ -47,6 +47,16 @@ export function createExternalTodosProxy(base: string) {
       );
 
       res.status(resp.status);
+      // CORS for clients from any origin
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET,POST,PUT,DELETE,OPTIONS,HEAD",
+      );
+      res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization, X-Requested-With",
+      );
       // Copy headers selectively
       resp.headers.forEach((val, key) => {
         if (key.toLowerCase() === "content-encoding") return;
