@@ -6,6 +6,7 @@ import { registerTodosRoutes } from "./routes/todos";
 import { createApp as createPublicTodosApp } from "../src/app";
 import { createExternalTodosProxy } from "./utils/proxy";
 import { corsAll } from "./middleware/corsAll";
+import { getExternalApiBase } from "./config";
 
 export function createServer() {
   const app = express();
