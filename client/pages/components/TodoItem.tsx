@@ -31,11 +31,26 @@ import { toast } from "sonner";
 import ThreeDotsWave from "@/components/loaders/ThreeDotsWave";
 
 function PriorityBadge({ p }: { p: Todo["priority"] }) {
-  const bg = p === "high" ? "bg-red-600" : p === "medium" ? "bg-yellow-500" : "bg-green-600";
-  const dot = p === "high" ? "bg-red-400" : p === "medium" ? "bg-yellow-400" : "bg-green-400";
+  const bg =
+    p === "high"
+      ? "bg-red-600"
+      : p === "medium"
+        ? "bg-yellow-500"
+        : "bg-green-600";
+  const dot =
+    p === "high"
+      ? "bg-red-400"
+      : p === "medium"
+        ? "bg-yellow-400"
+        : "bg-green-400";
   return (
-    <Badge className={`${bg} text-white flex items-center gap-1 pl-2 pr-2 py-0.5`}>
-      <span className={`inline-block h-2 w-2 rounded-full ${dot}`} aria-hidden="true" />
+    <Badge
+      className={`${bg} text-white flex items-center gap-1 pl-2 pr-2 py-0.5`}
+    >
+      <span
+        className={`inline-block h-2 w-2 rounded-full ${dot}`}
+        aria-hidden="true"
+      />
       {p.charAt(0).toUpperCase() + p.slice(1)}
     </Badge>
   );
