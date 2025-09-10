@@ -1,3 +1,12 @@
+const DEFAULT_EXTERNAL_API = "https://wph-024-api-todolist.vercel.app";
+
+function joinUrl(base: string, path: string) {
+  if (!path) return base;
+  const b = base.replace(/\/$/, "");
+  const p = path.startsWith("/") ? path : `/${path}`;
+  return `${b}${p}`;
+}
+
 export async function apiFetch(input: string, init?: RequestInit) {
   const tryOnce = async (url: string) => {
     const res = await fetch(url, init).catch((e) => {
@@ -9,9 +18,25 @@ export async function apiFetch(input: string, init?: RequestInit) {
     return res;
   };
 
-  const urls = [input, input.startsWith("/api") ? input : `/api${input}`];
+  const isAbsolute = /^(https?:)?\/\//i.test(input);
+  const apiBase = (import.meta as any).env?.VITE_API_BASE || "";
+  const candidates: string[] = [];
+
+  if (isAbsolute) {
+    candidates.push(input);
+  } else {
+    // Prefer same-origin serverless (/api) to avoid CORS in production
+    candidates.push(input.startsWith("/api") ? input : `/api${input}`);
+    // Then try relative path (for dev where routes are mounted at root)
+    candidates.push(input);
+    // Then configured external base (if provided)
+    if (apiBase) candidates.push(joinUrl(apiBase, input));
+    // Finally hardcoded external API fallback
+    candidates.push(joinUrl(DEFAULT_EXTERNAL_API, input));
+  }
+
   let lastErr: any;
-  for (const url of urls) {
+  for (const url of candidates) {
     try {
       return await tryOnce(url);
     } catch (e) {
