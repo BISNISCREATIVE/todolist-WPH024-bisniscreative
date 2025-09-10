@@ -33,7 +33,7 @@ import ThreeDotsWave from "@/components/loaders/ThreeDotsWave";
 function PriorityBadge({ p }: { p: Todo["priority"] }) {
   const color =
     p === "high"
-      ? "bg-pink-600"
+      ? "bg-red-600"
       : p === "medium"
         ? "bg-yellow-500"
         : "bg-green-600";
