@@ -38,8 +38,8 @@ function PriorityBadge({ p }: { p: Todo["priority"] }) {
         ? "bg-yellow-500"
         : "bg-green-600";
   return (
-    <Badge className={`${color} text-white`}>
-      {p.charAt(0).toUpperCase() + p.slice(1)}
+    <Badge variant="outline" className={`${color} text-white tracking-wide uppercase`}>
+      {p}
     </Badge>
   );
 }
