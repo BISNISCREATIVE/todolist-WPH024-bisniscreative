@@ -4,6 +4,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { registerTodosRoutes } from "./routes/todos";
 import { createApp as createPublicTodosApp } from "../src/app";
+import { createExternalTodosProxy } from "./utils/proxy";
 
 export function createServer() {
   const app = express();
@@ -18,6 +19,12 @@ export function createServer() {
     } catch {}
     next();
   });
+
+  // Optional external API proxy for /todos and /api/todos
+  const EXT = process.env.EXTERNAL_API_BASE;
+  if (EXT) {
+    app.use(createExternalTodosProxy(EXT));
+  }
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {
