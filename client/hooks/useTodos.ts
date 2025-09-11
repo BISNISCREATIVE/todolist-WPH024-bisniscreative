@@ -65,28 +65,29 @@ export function useTodosData() {
         search: filters.search || undefined,
       } as const;
 
-      const qsScroll = buildQueryParams({
-        ...base,
-        nextCursor: pageParam ?? null,
-      });
-      try {
-        const res = await apiFetch(`/todos/scroll?${qsScroll}`);
-        return res.json();
-      } catch {
-        // Fallback: use page endpoint and adapt to cursor shape
-        const qsPage = buildQueryParams({ ...base, page: pageParam ? 2 : 1 });
-        const r2 = await apiFetch(`/todos?${qsPage}`);
-        const page = (await r2.json()) as PageResponse;
-        const lastId = page.todos.length
-          ? page.todos[page.todos.length - 1].id
-          : null;
-        const adapted: CursorResponse = {
-          todos: page.todos,
-          nextCursor: page.hasNextPage ? lastId : null,
-          hasNextPage: page.hasNextPage,
-        };
-        return adapted;
+      const isNumParam = typeof pageParam === "string" && /^\d+$/.test(pageParam);
+
+      if (!isNumParam) {
+        const qsScroll = buildQueryParams({
+          ...base,
+          nextCursor: pageParam ?? null,
+        });
+        try {
+          const res = await apiFetch(`/todos/scroll?${qsScroll}`);
+          return res.json();
+        } catch {}
       }
+      // Fallback to page endpoint and adapt to cursor-like shape
+      const pageNum = isNumParam ? Number(pageParam) : 1;
+      const qsPage = buildQueryParams({ ...base, page: pageNum });
+      const r2 = await apiFetch(`/todos?${qsPage}`);
+      const page = (await r2.json()) as PageResponse;
+      const adapted: CursorResponse = {
+        todos: page.todos,
+        nextCursor: page.hasNextPage && page.nextPage ? String(page.nextPage) : null,
+        hasNextPage: page.hasNextPage,
+      };
+      return adapted;
     },
     initialPageParam: null,
     getNextPageParam: (last) =>
