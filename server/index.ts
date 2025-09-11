@@ -26,7 +26,8 @@ export function createServer() {
   // Optional external API proxy for /todos and /api/todos
   const EXT = getExternalApiBase();
   if (EXT) {
-    app.use(createExternalTodosProxy(EXT));
+    const PREFIX = process.env.EXTERNAL_TODOS_PREFIX || ""; // e.g. "/api"
+    app.use(createExternalTodosProxy(EXT, PREFIX));
   }
 
   // Example API routes
