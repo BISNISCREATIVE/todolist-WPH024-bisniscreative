@@ -1,16 +1,17 @@
 import type { Request, Response, NextFunction } from "express";
 
-export function createExternalTodosProxy(base: string) {
+export function createExternalTodosProxy(base: string, prefix = "") {
   const targetBase = base.replace(/\/$/, "");
+  const pre = prefix ? `/${prefix.replace(/^\/+|\/+$/g, "")}` : "";
   return async function proxy(req: Request, res: Response, next: NextFunction) {
     try {
       // Only handle /api/todos* or /todos*
       const path = req.path;
       if (!/^\/(api\/)?todos(\/.*)?$/.test(path)) return next();
 
-      // Map /api/todos -> /todos on target
+      // Map /api/todos -> /todos on target, and allow external prefix like /api
       const relPath = path.startsWith("/api/") ? path.slice(4) : path;
-      const url = `${targetBase}${relPath}${req.url.includes("?") ? "" : ""}`;
+      const url = `${targetBase}${pre}${relPath}`;
       const method = req.method.toUpperCase();
 
       const headers: Record<string, string> = {};
@@ -34,17 +35,14 @@ export function createExternalTodosProxy(base: string) {
         }
       }
 
-      const resp = await fetch(
-        url +
-          (req.originalUrl.includes("?")
-            ? req.originalUrl.slice(req.originalUrl.indexOf("?"))
-            : ""),
-        {
-          method,
-          headers,
-          body,
-        },
-      );
+      const qs = req.originalUrl.includes("?")
+        ? req.originalUrl.slice(req.originalUrl.indexOf("?"))
+        : "";
+      const resp = await fetch(url + qs, {
+        method,
+        headers,
+        body,
+      });
 
       res.status(resp.status);
       // CORS for clients from any origin
