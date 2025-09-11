@@ -69,11 +69,11 @@ export default function TodoList() {
   return (
     <div className="space-y-3">
       {infQuery.isLoading ? <SkeletonList /> : null}
-      {infQuery.data?.pages
-        .flatMap((p) => p.todos)
-        .map((t) => (
-          <TodoItem key={t.id} todo={t} />
-        ))}
+      {(() => {
+        const all = infQuery.data?.pages.flatMap((p) => p.todos) ?? [];
+        const uniq = Array.from(new Map(all.map((t) => [t.id, t])).values());
+        return uniq.map((t) => <TodoItem key={t.id} todo={t} />);
+      })()}
       {infQuery.isFetchingNextPage && (
         <div className="flex justify-center py-4">
           <ThreeDotsWave />
