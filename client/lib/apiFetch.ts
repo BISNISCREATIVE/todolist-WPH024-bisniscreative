@@ -1,4 +1,4 @@
-const DEFAULT_EXTERNAL_API = "https://wph-024-api-todolist.vercel.app";
+const DEFAULT_EXTERNAL_API = "https://backend-todo-api.onrender.com/api";
 
 function joinUrl(base: string, path: string) {
   if (!path) return base;
