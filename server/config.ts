@@ -1,4 +1,4 @@
-export const DEFAULT_EXTERNAL_API = "https://wph-024-api-todolist.vercel.app";
+export const DEFAULT_EXTERNAL_API = "https://backend-todo-api.onrender.com";
 
 export function getExternalApiBase(): string | null {
   const env = process.env.EXTERNAL_API_BASE || process.env.VITE_API_BASE || "";
